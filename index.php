@@ -1,132 +1,118 @@
+<?php
+session_start();
+error_reporting(0);
+include("include/config.php");
+if(isset($_POST['submit']))
+{
+$ret=mysql_query("SELECT * FROM admin WHERE username='".$_POST['username']."' and password='".$_POST['password']."'");
+$num=mysql_fetch_array($ret);
+if($num>0)
+{
+$extra="dashboard.php";//
+$_SESSION['login']=$_POST['username'];
+$_SESSION['id']=$num['id'];
+$host=$_SERVER['HTTP_HOST'];
+$uri=rtrim(dirname($_SERVER['PHP_SELF']),'/\\');
+header("location:http://$host$uri/$extra");
+exit();
+}
+else
+{
+$_SESSION['errmsg']="Invalid username or password";
+$extra="index.php";
+$host  = $_SERVER['HTTP_HOST'];
+$uri  = rtrim(dirname($_SERVER['PHP_SELF']),'/\\');
+header("location:http://$host$uri/$extra");
+exit();
+}
+}
+?>
 
-<!DOCTYPE HTML>
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
 	<head>
-		<title>Hospital Management System</title>
-		<link href="css/style.css" rel="stylesheet" type="text/css"  media="all" />
-		<link href='http://fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="css/responsiveslides.css">
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-		<script src="js/responsiveslides.min.js"></script>
-		  <script>
-		    // You can also use "$(window).load(function() {"
-			    $(function () {
-
-			      // Slideshow 1
-			      $("#slider1").responsiveSlides({
-			        maxwidth: 1600,
-			        speed: 600
-			      });
-			});
-		  </script>
+		<title>Admin-Login</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="" name="description" />
+		<meta content="" name="author" />
+		<link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="vendor/themify-icons/themify-icons.min.css">
+		<link href="vendor/animate.css/animate.min.css" rel="stylesheet" media="screen">
+		<link href="vendor/perfect-scrollbar/perfect-scrollbar.min.css" rel="stylesheet" media="screen">
+		<link href="vendor/switchery/switchery.min.css" rel="stylesheet" media="screen">
+		<link rel="stylesheet" href="assets/css/styles.css">
+		<link rel="stylesheet" href="assets/css/plugins.css">
+		<link rel="stylesheet" href="assets/css/themes/theme-1.css" id="skin_color" />
 	</head>
-	<body>
-		<!--start-wrap-->
-
-			<!--start-header-->
-			<div class="header">
-				<div class="wrap">
-				<!--start-logo-->
-				<div class="logo">
-					<a href="index.html" style="font-size: 30px;">Hospital Management system</a>
+	<body class="login">
+		<div class="row">
+			<div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+				<div class="logo margin-top-30">
+				<h2>Admin Login</h2>
 				</div>
-				<!--end-logo-->
-				<!--start-top-nav-->
-				<div class="top-nav">
-					<ul>
-						<li class="active"><a href="index.html">Home</a></li>
 
-						<li><a href="contact.php">contact</a></li>
-					</ul>
+				<div class="box-login">
+					<form class="form-login" method="post">
+						<fieldset>
+							<legend>
+								Sign in to your account
+							</legend>
+							<p>
+								Please enter your name and password to log in.<br />
+								<span style="color:red;"><?php echo htmlentities($_SESSION['errmsg']); ?><?php echo htmlentities($_SESSION['errmsg']="");?></span>
+							</p>
+							<div class="form-group">
+								<span class="input-icon">
+									<input type="text" class="form-control" name="username" placeholder="Username">
+									<i class="fa fa-user"></i> </span>
+							</div>
+							<div class="form-group form-actions">
+								<span class="input-icon">
+									<input type="password" class="form-control password" name="password" placeholder="Password"><i class="fa fa-lock"></i>
+									 </span>
+							</div>
+							<div class="form-actions">
+								
+								<button type="submit" class="btn btn-primary pull-right" name="submit">
+									Login <i class="fa fa-arrow-circle-right"></i>
+								</button>
+							</div>
+							
+						</fieldset>
+					</form>
+
+					<div class="copyright">
+						&copy; <span class="current-year"></span><span class="text-bold text-uppercase"> HMS</span>. <span>All rights reserved</span>
+					</div>
+			
 				</div>
-				<div class="clear"> </div>
-				<!--end-top-nav-->
+
 			</div>
-			<!--end-header-->
 		</div>
-		<div class="clear"> </div>
-			<!--start-image-slider---->
-					<div class="image-slider">
-						<!-- Slideshow 1 -->
-					    <ul class="rslides" id="slider1">
-					      <li><img src="images/slider-image1.jpg" alt=""></li>
-					      <li><img src="images/slider-image2.jpg" alt=""></li>
-					      <li><img src="images/slider-image1.jpg" alt=""></li>
-					    </ul>
-						 <!-- Slideshow 2 -->
-					</div>
-					<!--End-image-slider---->
-		    <div class="clear"> </div>
-		    <div class="content-grids">
-		    	<div class="wrap">
-		    	<div class="section group">
+		<script src="vendor/jquery/jquery.min.js"></script>
+		<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script src="vendor/modernizr/modernizr.js"></script>
+		<script src="vendor/jquery-cookie/jquery.cookie.js"></script>
+		<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+		<script src="vendor/switchery/switchery.min.js"></script>
+		<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+	
+		<script src="assets/js/main.js"></script>
 
-
-				<div class="listview_1_of_3 images_1_of_3">
-					<div class="listimg listimg_1_of_2">
-						  <img src="images/grid-img3.png">
-					</div>
-					<div class="text list_1_of_2">
-						  <h3>Patients</h3>
-						  <p>Register & Book Appointment</p>
-						  <div class="button"><span><a href="hms/user-login.php">Click Here</a></span></div>
-				    </div>
-				</div>
-
-				<div class="listview_1_of_3 images_1_of_3">
-					<div class="listimg listimg_1_of_2">
-						  <img src="images/grid-img1.png">
-					</div>
-					<div class="text list_1_of_2">
-						  <h3>Doctors Login</h3>
-
-						  <div class="button"><span><a href="hms/doctor/">Click Here</a></span></div>
-					</div>
-				</div>
-
-
-					<div class="listview_1_of_3 images_1_of_3">
-					<div class="listimg listimg_1_of_2">
-						  <img src="images/grid-img2.png">
-					</div>
-					<div class="text list_1_of_2">
-						  <h3>Admin Login</h3>
-
-						  <div class="button"><span><a href="hms/admin">Click Here</a></span></div>
-				     </div>
-				</div>
-			</div>
-		    </div>
-		   </div>
-		   <div class="wrap">
-		   <div class="content-box">
-		   <div class="section group">
-				<div class="col_1_of_3 span_1_of_3 frist">
-
-				</div>
-				<div class="col_1_of_3 span_1_of_3 second">
-
-				</div>
-				<div class="col_1_of_3 span_1_of_3 frist">
-
-
-				</div>
-			</div>
-		   </div>
-		   </div>
-		   <div class="clear"> </div>
-		   <div class="footer">
-		   	 <div class="wrap">
-		   	<div class="footer-left">
-		   			<ul>
-						<li><a href="index.html">Home</a></li>
-						<li><a href="contact.php">contact</a></li>
-					</ul>
-		   	</div>
-
-		   	<div class="clear"> </div>
-		   </div>
-		   </div>
-		<!--end-wrap-->
+		<script src="assets/js/login.js"></script>
+		<script>
+			jQuery(document).ready(function() {
+				Main.init();
+				Login.init();
+			});
+		</script>
+	
 	</body>
+	<!-- end: BODY -->
 </html>
